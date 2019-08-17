@@ -1,54 +1,82 @@
-//import library express 
-const express = require('express')
-//create express app 
-const app = express()
-const port = 3000
+//import library express
+const express = require("express");
+//create express app
+const app = express();
+const port = 3000;
 
-app.use(express.json())
-app.get('/',(req,res) => res.send('Hello Worldff!'))
+app.use(express.json());
+app.get("/", (req, res) => res.send("Hello Worldff!"));
 
-/*  get  /pokemon -> list all
-*/
+class Pokemon {
+    constructor(name, type) {
+        this.name = name
+        this.type = type
+        this.id = null
+        this.type2 = null
+    }
+ }
+ 
+let pokemons = [];
+pokemons.push(createPokemon('kittiya', 'beauty'))
+pokemons.push(createPokemon('sorawit', 'handsome'))
+
+function generateNewID(num) {
+  let newID = num + 1
+  return newID
+}
+
+function createPokemon(name, type) {
+  let p = new Pokemon(name, type)
+  p.id = generateNewID(pokemons.length)
+  return p;
+}
+
+ function isInsufficientParam(){
+     return v!== undefined &&  v!== null && v!== ''
+ }
+app.get("/pokemons", (req, res) => res.send(pokemons));
+app.post("/pokemons", (req, res) => {
+  if(isInsufficientParam(req.body.name) || isInsufficientParam(req.body.type))
+    {
+    res.sendStatus(404).send({error : 'Insufficient parameters: name and type are required parameter'})
+    return 
+  }
+  let p = createPokemon(req.body.name, req.body.type);
+  pokemons.push(p);
+  res.sendStatus(201);
+});
 
 
-let pokemons = [
-{ name: 'Bulbasaur',type : 'Grass'},
-{ name: 'Lycanroc',type : 'Rock'},
-{ name: 'Toxapex',type : 'Poison'}
+// GET http://localhost:3000/pokemons/1
+app.get('/pokemon/:id' , (req,res)=> {
+    let.id = req.params.id
+    let p = pokemons[id-1]
+    res.send(p)
+})
+// PUT http://localhost:3000/pokemons/1
+// Add type 2 
 
-]
+app.put('/pokemon/:id' , (req,res)=> {
+    if(!isInsufficientParam(req.body.type2)){
+        res.status(400).send({error : 'Insufficient parameters: name and type2 are required parameter'})
+        return
+    }
+    if(!isInsufficientParam(req.body.id)){
+        res.status(400).send({error : 'Insufficient parameters: name and id are required parameter'})
+        return
+    }
 
-//เรียกเราชื่อออกมา
-app.get('/pokemons',(req,res) => res.send(pokemons))
-
-
-
-
-/* 
-POST /pokemon -> add pokemon to list 
- */
-//เพิ่มเข้าไปในฐานข้อมุล
-app.post('/pokemons',(req,res) =>{
-    //req is request
-    //res is response 
-    pokemons.push(req.body)
-    //ค่าที่ได้ออกมา แสดงว่ามันเก็บ object มา ขึ้นอยู่ว่ามันส่งอะไรมา ดังนั้นเราก็สารถเก็บค่านั้นได้เลย 
+    let id = req.params.id
+    let p = pokemons[id-1]
+    if(p === undefined){
+        res.status(400).send({error :'Cannot update pokemon: Pokemon is not found'})
+        return
+    }
+    p.type2 = req.body.type2
+    pokemons[id-1] = p 
     res.sendStatus(201)
 })
 
 
 
-app.listen(port,() => console.log(`Pokemon App  listening on port ${port}!`))
-
-
-
-
-
-
-
-
-
-
-
-
-
+app.listen(port, () => console.log(`Pokemon App  listening on port ${port}!`));
