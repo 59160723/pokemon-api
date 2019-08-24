@@ -16,9 +16,9 @@ describe('Pokemon API', () => {
         })
     })
 
-    describe('GET /pokemons/:id', () => {
+    describe('GET /pokemon/:id', () => {
         it('should return 200 ok with object', (done) => {
-            request(app).get('/pokemons/1')
+            request(app).get('/pokemon/1')
                 .expect(200)
                 .end((err, res) => {
                     res.body.should.to.be.an('object')
@@ -30,7 +30,7 @@ describe('Pokemon API', () => {
                 })
         })
         it('should return 400 bad request', (done) => {
-            request(app).get('/pokemons/99')
+            request(app).get('/pokemon/99')
                 .expect(400)
                 .end((err, res) => {
                     res.body.error.should.equal('The Pokemon could be not found')
@@ -61,15 +61,15 @@ describe('Pokemon API', () => {
         })
 
     })
-    describe('PUT /pokemons/:id', () => {
+    describe('PUT /pokemon/:id', () => {
         it('should return 200 OK and the pokemon has type2', (done) => {
-            request(app).put('/pokemons/1')
+            request(app).put('/pokemon/1')
                 .send({ type2: 'Bug' })
                 .set('Accept', 'application/json')
                 .expect(200, done)
         })
         it('should return 400 Bad Request when try to update not existed pokemon', (done) => {
-            request(app).put('/pokemons/1000')
+            request(app).put('/pokemon/1000')
                 .send({ type2: 'Bug' })
                 .set('Accept', 'application/json')
                 .expect(400)
