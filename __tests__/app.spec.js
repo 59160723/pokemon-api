@@ -29,14 +29,84 @@ describe('Pokemon API', () => {
                     done()
                 })
         })
-        it('should return 400 bad request', (done) => {
-            request(app).get('/pokemon/99')
-                .expect(400)
-                .end((err, res) => {
-                    res.body.error.should.equal('The Pokemon could be not found')
-                    done()
-                })
-        })
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     })
 
 
@@ -86,7 +156,7 @@ describe('Integration Test', () => {
     it('GET /pokemons should return list of pokemons', (done) => {
         request('http://localhost:3000').get('/pokemons')
             .expect(200)
-            .end((err,res) => {
+            .end((err, res) => {
                 res.body.should.be.a('array')
                 done()
             })
